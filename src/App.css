@@ -309,7 +309,6 @@ body {
     .todo-form input,
     .todo-form button {
       font-size: 12px;
-      padding: 10px;
     }
   
     .todo-item {
