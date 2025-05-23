@@ -1,20 +1,38 @@
-import { create } from 'zustand';
+import { create } from 'zustand'
 
-const useTodoStore = create((set) => ({
+export const useTodoStore = create((set) => ({
   tasks: [],
+  currentFilter: 'all',
 
-  addTask: (text) =>
+  //action to add new task
+  addTask: (text, dueDate = null) =>
     set((state) => ({
       tasks: [
         ...state.tasks,
         {
-          id: Date.now(),
+          id: Date.now().toString(),
           text,
           completed: false,
-          createdAt: new Date(),
+          createdAt: new Date().toISOString(),
+          dueDate: dueDate ? new Date(dueDate).toISOString() : null, 
         },
       ],
     })),
-}));
 
-export default useTodoStore;
+//action to toggle task if completed or not
+  toggleTask: (id) =>
+    set((state) => ({
+      tasks: state.tasks.map((task) =>
+        task.id === id ? { ...task, completed: !task.completed } : task
+      ),
+    })),
+
+//action to remove task
+  removeTask: (id) =>
+    set((state) => ({
+      tasks: state.tasks.filter((task) => task.id !== id),
+    })),
+
+//action to set the current filter
+  setFilter: (filterType) => set({ currentFilter: filterType }),
+}))
